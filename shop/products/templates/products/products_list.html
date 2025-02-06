@@ -1,0 +1,87 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Каталог товарів
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar bg-light p-4 rounded shadow-sm">
+                <h4 class="fw-bold">Фільтри</h4>
+                <form method="get" class="mt-4">
+                    <div class="mb-3">
+                        <label for="category" class="form-label fw-bold">Категорія</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-primary text-white"><i class="bi bi-list"></i></span>
+                            <select class="form-select" name="category" id="category" onchange="this.form.submit()">
+                                <option value="">Всі категорії</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"i" %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sort" class="form-label fw-bold">Сортувати за</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-success text-white"><i class="bi bi-arrow-down-up"></i></span>
+                            <select class="form-select" name="sort" id="sort" onchange="this.form.submit()">
+                                <option value="title">За замовчуванням</option>
+                                <option value="price" {% if request.GET.sort == 'price' %}selected{% endif %}>Ціна: від низької до високої</option>
+                                <option value="-price" {% if request.GET.sort == '-price' %}selected{% endif %}>Ціна: від високої до низької</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm"><i class="bi bi-funnel"></i> Застосувати фільтри</button>
+                    </div>
+
+                    <div class="mb-3">
+                        <a href="{% url 'products:list' %}" class="btn btn-danger w-100 py-2 fw-bold shadow-sm"><i class="bi bi-x-circle"></i> Скинути фільтри</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for product in products %}
+                <div class="col">
+                    <div class="product-card h-100">
+                        {% if product.discount %}
+                        <div class="discount-badge">-{{ product.discount }}%</div>
+                        {% endif %}
+                        <div class="product-image mb-3">
+                            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="img-fluid">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title mb-3">{{ product.title }}</h3>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="price-block">
+                                    <span class="current-price">{{ product.price }} грн</span>
+                                    {% if product.old_price %}
+                                    <span class="old-price">{{ product.old_price }} грн</span>
+                                    {% endif %}
+                                </div>
+                                
+                            </div>
+                            <button class="buy-button" onclick="window.location.href='{% url 'products:page' product.id %}'; event.preventDefault();">Купити </button>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">Товари не знайдено</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

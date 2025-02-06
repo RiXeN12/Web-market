@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="form-container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="form-card">
+                <div class="form-header text-center mb-4">
+                    <div class="icon-circle mb-3">
+                        {% if 'product' in title.lower %}
+                            <i class="fas fa-box"></i>
+                        {% else %}
+                            <i class="fas fa-folder"></i>
+                        {% endif %}
+                    </div>
+                    <h2 class="form-title">{{ title }}</h2>
+                    <p class="text-muted">
+                        {% if 'product' in title.lower %}
+                            Заповніть інформацію про товар
+                        {% else %}
+                            Заповніть інформацію про категорію
+                        {% endif %}
+                    </p>
+                </div>
+
+                <form method="post" enctype="multipart/form-data" class="custom-form">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-floating mb-4">
+                            <div class="input-group">
+                                {% if field.field.widget.input_type == 'file' %}
+                                    <div class="file-upload-wrapper">
+                                        <button type="button" class="file-upload-btn">
+                                            <i class="fas fa-upload me-2"></i> Вибрати фото
+                                        </button>
+                                        {{ field }}
+                                        <span class="file-name">Файл не вибрано</span>
+                                    </div>
+                                {% else %}
+                                    {{ field }}
+                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                        {{ field.label }}
+                                        {% if field.field.required %}
+                                            <span class="required">*</span>
+                                        {% endif %}
+                                    </label>
+                                {% endif %}
+                            </div>
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <div class="error-message">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if field.help_text %}
+                                <div class="help-text">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    {{ field.help_text }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary save-btn">
+                            <i class="fas fa-save me-2"></i>Зберегти
+                        </button>
+                        <a href="{% url 'products:list' %}" class="btn btn-outline-secondary cancel-btn">
+                            <i class="fas fa-times me-2"></i>Скасувати
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="product-container">
+
+    <div class="product-gallery">
+        <div class="main-image">
+            <img src="{{ product.image.url }}" alt="{{ product.title }}" id="mainImage">
+            {% if product.discount %}
+            <span class="discount-badge">-{{ product.discount }}%</span>
+            {% endif %}
+        </div>
+        <div class="thumbnail-list">
+            {% for image in product.images.all %}
+            <div class="thumbnail">
+                <img src="{{ image.url }}" alt="{{ product.title }}" onclick="changeMainImage(this.src)">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <div class="product-info">
+        <h1 class="product-title">{{ product.title }}</h1>
+        
+        <div class="price-block">
+            <span class="current-price">{{ product.price }} ГРН</span>
+            {% if product.old_price %}
+            <span class="old-price">{{ product.old_price }} ГРН</span>
+            {% endif %}
+        </div>
+
+
+        <div class="size-selector">
+            <h3>Оберіть розмір:</h3>
+            <div class="size-options">
+                {% for size in sizes %}
+                <button class="size-btn" data-size="{{ size }}">{{ size }}</button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="add-to-cart">Додати у кошик</button>
+        </div>
+
+        <div class="delivery-info">
+            <div class="info-item">
+                <i class="delivery-icon"></i>
+                <span>Безкоштовна доставка від 3 000 ГРН</span>
+            </div>
+            <div class="info-item">
+                <i class="time-icon"></i>
+                <span>Доставка з Польщі до 14 днів</span>
+            </div>
+            <div class="info-item">
+                <i class="payment-icon"></i>
+                <span>Безпечні платежі</span>
+            </div>
+        </div>
+
+
+        <div class="product-description">
+            <h3>Опис товару</h3>
+            <div class="description-content">
+                {{ product.description|linebreaks }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}Видалення категорії{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title mb-0">Видалення категорії</h2>
+            </div>
+            <div class="card-body">
+                <p>Ви впевнені, що хочете видалити категорію "{{ category.name }}"?</p>
+                <p class="text-danger">
+                    <strong>Увага!</strong> Всі продукти в цій категорії також будуть видалені.
+                </p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">Видалити</button>
+                        <a href="{% url 'products:category_list' %}" class="btn btn-secondary">Скасувати</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

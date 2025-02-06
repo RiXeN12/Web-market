@@ -1,0 +1,124 @@
+{% extends 'layout.html' %}
+
+
+{% block title %}Список продуктів{% endblock %}
+
+{% block content %}
+<div class="products-container py-5">
+   <div class="container">
+       <div class="products-header mb-4">
+           <div class="row align-items-center">
+               <div class="col-md-6">
+                   <div class="header-content">
+                       <div class="header-icon">
+                           <i class="fas fa-box"></i>
+                       </div>
+                       <div class="header-text">
+                           <h2 class="mb-0">Список продуктів</h2>
+                           <p class="text-muted mb-0">Керування асортиментом магазину</p>
+                       </div>
+                   </div>
+               </div>
+               <div class="col-md-6 text-md-end">
+                   <a href="{% url 'products:product_create' %}" class="btn btn-gradient">
+                       <i class="fas fa-plus-circle me-2"></i>Додати продукт
+                   </a>
+               </div>
+           </div>
+       </div>
+
+       <div class="products-table-card">
+           <div class="table-responsive">
+               <table class="table products-table">
+                   <thead>
+                       <tr>
+                           <th>Зображення</th>
+                           <th>Назва</th>
+                           <th>Категорія</th>
+                           <th>Ціна</th>
+                           <th>Кількість</th>
+                           <th>Статус</th>
+                           <th>Дії</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       {% for product in products %}
+                           <tr class="align-middle">
+                               <td>
+                                   <div class="product-image2">
+                                       {% if product.image %}
+                                           <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                                       {% else %}
+                                           <div class="no-image">
+                                               <i class="fas fa-image"></i>
+                                           </div>
+                                       {% endif %}
+                                   </div>
+                               </td>
+                               <td>
+                                   <div class="product-info">
+                                       <h6 class="product-title mb-1">{{ product.title }}</h6>
+                                       <small class="text-muted">{{ product.description|truncatewords:10 }}</small>
+                                   </div>
+                               </td>
+                               <td>
+                                   <span class="category-badge">{{ product.category.name }}</span>
+                               </td>
+                               <td>
+                                   <div class="price-tag">
+                                       {{ product.price }} ₴
+                                   </div>
+                               </td>
+                               <td>
+                                   <div class="quantity-indicator">
+                                       {% if product.quantity > 10 %}
+                                           <span class="badge bg-success">{{ product.quantity }}</span>
+                                       {% elif product.quantity > 0 %}
+                                           <span class="badge bg-warning">{{ product.quantity }}</span>
+                                       {% else %}
+                                           <span class="badge bg-danger">Немає в наявності</span>
+                                       {% endif %}
+                                   </div>
+                               </td>
+                               <td>
+                                   <div class="status-badge {% if product.available %}available{% else %}unavailable{% endif %}">
+                                       {% if product.available %}
+                                           <i class="fas fa-check-circle me-1"></i>Активний
+                                       {% else %}
+                                           <i class="fas fa-times-circle me-1"></i>Неактивний
+                                       {% endif %}
+                                   </div>
+                               </td>
+                               <td>
+                                   <div class="action-buttons">
+                                       <a href="{% url 'products:product_edit' product.id %}" 
+                                          class="btn btn-icon btn-edit" 
+                                          title="Редагувати">
+                                           <i class="fas fa-edit"></i>
+                                       </a>
+                                       <a href="{% url 'products:product_delete' product.id %}" 
+                                          class="btn btn-icon btn-delete" 
+                                          title="Видалити">
+                                           <i class="fas fa-trash"></i>
+                                       </a>
+                                   </div>
+                               </td>
+                           </tr>
+                       {% empty %}
+                           <tr>
+                               <td colspan="7" class="text-center py-5">
+                                   <div class="empty-state">
+                                       <i class="fas fa-box-open mb-3"></i>
+                                       <h5>Продукти відсутні</h5>
+                                       <p class="text-muted">Додайте свій перший продукт, натиснувши кнопку "Додати продукт"</p>
+                                   </div>
+                               </td>
+                           </tr>
+                       {% endfor %}
+                   </tbody>
+               </table>
+           </div>
+       </div>
+   </div>
+</div>
+{% endblock %}

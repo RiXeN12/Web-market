@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block title %}Список категорій{% endblock %}
+
+{% block content %}
+<div class="categories-container py-5">
+    <div class="container">
+        <div class="categories-header mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="header-content">
+                        <div class="header-icon">
+                            <i class="fas fa-folder"></i>
+                        </div>
+                        <div class="header-text">
+                            <h2 class="mb-0">Список категорій</h2>
+                            <p class="text-muted mb-0">Керування категоріями магазину</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="{% url 'products:category_create' %}" class="btn btn-gradient">
+                        <i class="fas fa-plus-circle me-2"></i>Додати категорію
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="categories-table-card">
+            <div class="table-responsive">
+                <table class="table categories-table">
+                    <thead>
+                        <tr>
+                            <th>Назва</th>
+                            <th>Опис</th>
+                            <th>Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                            <tr class="align-middle">
+                                <td>
+                                    <div class="category-info">
+                                        <h6 class="category-title mb-0">{{ category.name }}</h6>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="category-description">
+                                        {{ category.description|truncatewords:20 }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="{% url 'products:category_edit' category.id %}" 
+                                           class="btn btn-icon btn-edit" 
+                                           title="Редагувати">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'products:category_delete' category.id %}" 
+                                           class="btn btn-icon btn-delete" 
+                                           title="Видалити">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center py-5">
+                                    <div class="empty-state">
+                                        <i class="fas fa-folder-open mb-3"></i>
+                                        <h5>Категорії відсутні</h5>
+                                        <p class="text-muted">Додайте свою першу категорію, натиснувши кнопку "Додати категорію"</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
