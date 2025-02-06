@@ -1077,3 +1077,16 @@ body {
     color: #6c757d;
 }
 
+
+
+
+
+
+
+body {
+    background-color: #f4f6f9;
+}
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}

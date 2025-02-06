@@ -124,3 +124,5 @@ document.querySelectorAll('input[type="file"]').forEach(input => {
         fileNameSpan.textContent = input.files.length > 0 ? input.files[0].name : 'Файл не вибрано';
     });
 });
+
+
